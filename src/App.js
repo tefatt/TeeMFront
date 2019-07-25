@@ -57,6 +57,8 @@ class App extends Component {
     };
 
     render() {
+        // const videoIsSelected = !(this.state.videos === undefined || this.state.videos.length === 0);
+        const videoIsSelected = true;
         return (
             < React.Fragment>
                 <div style={{"display": "flex", "flexDirection": "column"}}>
@@ -84,7 +86,14 @@ class App extends Component {
                         />
                     </div>
                 </div>
-                <CollectionsPage/>
+                <div style={{
+                    "display": "flex",
+                    "alignSelf": "center",
+                    "paddingTop": "20px",
+                    "paddingLeft": "250px"
+                }}>
+                    {videoIsSelected && <CollectionsPage/>}
+                </div>
             </React.Fragment>
 
         );
