@@ -1,78 +1,95 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import {Button, Modal, Form, Input, Icon} from 'antd';
+import {Button, Modal, Form, Checkbox, Input, Row, Col, Icon} from 'antd';
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux';
+import {inputQuestion} from '../actions/questionActions';
+
 
 const FormItem = Form.Item;
 
 const CollectionCreateForm = Form.create()(
     (props) => {
-        const {visible, onCancel, onCreate, add, remove, form} = props;
+        const {visible, playedTime, onCancel, onCreate, add, remove, form} = props;
 
-        const { getFieldDecorator, getFieldValue } = form;
+        const {getFieldDecorator, getFieldValue} = form;
         const formItemLayout = {
             labelCol: {
-                xs: { span: 24 },
-                sm: { span: 4 },
+                xs: {span: 24},
+                sm: {span: 4},
             },
             wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 20 },
+                xs: {span: 24},
+                sm: {span: 20},
             },
         };
         const formItemLayoutWithOutLabel = {
             wrapperCol: {
-                xs: { span: 24, offset: 0 },
-                sm: { span: 20, offset: 4 },
+                xs: {span: 24, offset: 0},
+                sm: {span: 20, offset: 4},
             },
         };
-        getFieldDecorator('keys', { initialValue: [] });
+        getFieldDecorator('keys', {initialValue: []});
         const keys = getFieldValue('keys');
+
         const formItems = keys.map((k, index) => (
-            <Form.Item
-                {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-                label={index === 0 ? 'Answers' : ''}
-                required={false}
-                key={k}
-            >
-                {getFieldDecorator(`answers[${k}]`, {
-                    validateTrigger: ['onChange', 'onBlur'],
-                    rules: [
-                        {
-                            required: true,
-                            whitespace: true,
-                            message: "Please input the text of answer or delete this field.",
-                        },
-                    ],
-                })(<Input placeholder="Enter your answer here" style={{ width: '60%', marginRight: 8 }} />)}
-                {keys.length > 1 ? (
-                    <Icon
-                        className="dynamic-delete-button"
-                        type="minus-circle-o"
-                        onClick={() => remove(k)}
-                    />
-                ) : null}
-            </Form.Item>
+            <Row>
+                <Col>
+                    <Form.Item
+                        {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                        label={index === 0 ? 'Answers' : ''}
+                        required={true}
+                        key={k}
+                    >
+                        {getFieldDecorator(`answers[${k}]`, {
+                            validateTrigger: ['onChange', 'onBlur'],
+                            rules: [
+                                {
+                                    required: true,
+                                    whitespace: true,
+                                    message: "Please input the text of answer or delete this field.",
+                                },
+                            ],
+                        })(<Input placeholder="Enter your answer here" style={{width: '60%', marginRight: 8}}/>)
+                        }
+                        {keys.length > 1 ? (
+                            <Icon
+                                className="dynamic-delete-button"
+                                type="minus-circle-o"
+                                onClick={() => remove(k)}
+                            />
+                        ) : null}
+                    </Form.Item>
+                </Col>
+                <Col>
+                    <Form.Item>
+                        {getFieldDecorator(`isCorrect[${k}]`, {})(<Checkbox>Correct Answer</Checkbox>)}
+                    </Form.Item>
+                </Col>
+            </Row>
         ));
+        const questionTitle = `Create a new question at: ${playedTime}s`;
         return (
             <Modal
                 visible={visible}
-                title="Create a new question"
+                title={questionTitle}
                 okText="Create"
                 onCancel={onCancel}
                 onOk={onCreate}
             >
                 <Form layout="vertical">
                     <FormItem label="Question text">
-                        {getFieldDecorator('question', {
+                        {getFieldDecorator('title', {
                             rules: [{required: true, message: 'Please enter the text of question'}],
                         })(
                             <Input type="textarea"/>
                         )}
+
                     </FormItem>
                     {formItems}
                     <Form.Item {...formItemLayoutWithOutLabel}>
-                        <Button type="dashed" onClick={add} style={{ width: '60%' }}>
-                            <Icon type="plus" /> Add answer
+                        <Button type="dashed" onClick={add} style={{width: '60%'}}>
+                            <Icon type="plus"/> Add answer
                         </Button>
                     </Form.Item>
                 </Form>
@@ -81,16 +98,28 @@ const CollectionCreateForm = Form.create()(
     }
 );
 
-class CollectionsPage extends React.Component {
+class InputQuestion extends React.Component {
     state = {
         visible: false,
-        index: 0
+        index: 0,
+        playedTime: 0
     };
+
+    _restructureValues(values) {
+        console.log(values)
+        let answers = values.answers.filter(el => el);
+        console.log(answers)
+        return answers.map((value, i) => {
+            return {"answerText": value, "isCorrect": !!values.isCorrect[i], "key": i}
+        });
+    }
+
     showModal = () => {
-        this.setState({visible: true});
+        let playedTime = this.props.getPlayerTime();
+        this.setState({visible: true, playedTime});
     };
     handleCancel = () => {
-        this.setState({visible: false, index:0});
+        this.setState({visible: false, index: 0});
     };
     handleCreate = () => {
         const form = this.form;
@@ -98,9 +127,15 @@ class CollectionsPage extends React.Component {
             if (err) {
                 return;
             }
-            console.log('Received values of form: ', values);
+            values["answerData"] = this._restructureValues(values);
+            values["playedTime"] = this.state.playedTime;
+
+            const {["keys"]: _, ["answers"]: __, ["isCorrect"]: ___, ...questionData} = values;
+
+            // dispatch action
+            this.props.inputQuestion(questionData);
             form.resetFields();
-            this.setState({visible: false, index:0});
+            this.setState({visible: false, index: 0, playedTime: 0});
         });
     };
     saveFormRef = (form) => {
@@ -111,7 +146,7 @@ class CollectionsPage extends React.Component {
         const form = this.form;
         // can use data-binding to get
         const keys = form.getFieldValue('keys');
-        // We need at least one passenger
+        // We need at least one answer
         if (keys.length === 1) {
             return;
         }
@@ -140,6 +175,7 @@ class CollectionsPage extends React.Component {
                 <Button type="primary" onClick={this.showModal}>Add Question</Button>
                 <CollectionCreateForm
                     ref={this.saveFormRef}
+                    playedTime={this.state.playedTime}
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     onCreate={this.handleCreate}
@@ -152,4 +188,12 @@ class CollectionsPage extends React.Component {
     }
 }
 
-export default CollectionsPage;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        inputQuestion: (values) => {
+            dispatch(inputQuestion(values));
+        }
+    };
+};
+
+export default connect(null, mapDispatchToProps)(InputQuestion);

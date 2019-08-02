@@ -1,9 +1,15 @@
 import React, {Component} from 'react';
+import {Provider} from 'react-redux';
+
+
 import SearchBar from './Components/SearchBar';
 import VideoList from './Components/VideoList';
 import VideoDetail from './Components/VideoDetail';
 import YTSearch from 'youtube-api-search';
-import CollectionsPage from './Components/InputQuestion'
+import InputQuestion from './Components/InputQuestion'
+import PresentedQuestions from './Components/PresentedQuestions'
+
+import store from './store'
 
 import './App.css';
 import {Icon, notification} from 'antd';
@@ -19,8 +25,10 @@ class App extends Component {
         this.state = {
             videos: [],
             search: true,
-            selectedVideo: {}
+            selectedVideo: {},
         };
+        this.videoRef = React.createRef();
+
     }
 
     videoSearch(term) {
@@ -38,64 +46,68 @@ class App extends Component {
                         description: "Youtube data API daily limit have exceeded. Quota will be recharged at 1:30pm IST. Wait till then.",
                     })
                 }
-
             });
         }
-
     }
-
 
     handleInput = (value) => {
         if (value === '') {
-            this.setState({videos: [], selectedVideo: null});
             return;
         }
-        console.log(value);
         if (this.state.search) {
             this.videoSearch(value);
         }
     };
 
-    render() {
-        // const videoIsSelected = !(this.state.videos === undefined || this.state.videos.length === 0);
-        const videoIsSelected = true;
-        return (
-            < React.Fragment>
-                <div style={{"display": "flex", "flexDirection": "column"}}>
-                    <div style={{"display": "flex", "justifyContent": "space-between", "background": "#123456"}}>
-                        <h1 style={{
-                            "color": "#fff",
-                            "alignSelf": "center",
-                            "flexBasis": "4",
-                            "paddingTop": "20px",
-                            "paddingLeft": "30px"
-                        }}>YTSearch <Icon type={"search"}/></h1>
-                        <SearchBar videos={this.state.videos} video={this.state.selectedVideo}
-                                   onInput={this.handleInput}
-                                   handleSearch={(video) => {
-                                       this.setState({selectedVideo: this.state.videos[video], search: false})
-                                   }}/>
-                    </div>
-                    <div style={{"display": "flex", "height": "60vh"}}>
-                        <VideoDetail ytKey={API_KEY} video={this.state.selectedVideo}/>
-                        <VideoList
-                            videos={this.state.videos}
-                            onVideoSelect={(userSelected) => {
-                                this.setState({selectedVideo: this.state.videos[userSelected]})
-                            }}
-                        />
-                    </div>
-                </div>
-                <div style={{
-                    "display": "flex",
-                    "alignSelf": "center",
-                    "paddingTop": "20px",
-                    "paddingLeft": "250px"
-                }}>
-                    {videoIsSelected && <CollectionsPage/>}
-                </div>
-            </React.Fragment>
+    getPlayerTime = () => {
+        console.log(this.videoRef)
+        return this.videoRef.current.getTimeThatPassed();
+    };
 
+    render() {
+        const videoIsSelected = !(this.state.videos === undefined || this.state.videos.length === 0);
+        // const videoIsSelected = true;
+        return (
+            <Provider store={store}>
+                <React.Fragment>
+                    <div style={{"display": "flex", "flexDirection": "column"}}>
+                        <div style={{"display": "flex", "justifyContent": "space-between", "background": "#123456"}}>
+                            <h1 style={{
+                                "color": "#fff",
+                                "alignSelf": "center",
+                                "flexBasis": "4",
+                                "paddingTop": "20px",
+                                "paddingLeft": "30px"
+                            }}>YTSearch <Icon type={"search"}/></h1>
+                            <SearchBar videos={this.state.videos} video={this.state.selectedVideo}
+                                       onInput={this.handleInput}
+                                       handleSearch={(video) => {
+                                           this.setState({selectedVideo: this.state.videos[video], search: false})
+                                       }}/>
+                        </div>
+                        <div style={{"display": "flex", "height": "60vh"}}>
+                            <VideoDetail ytKey={API_KEY} video={this.state.selectedVideo} ref={this.videoRef}/>
+                            <VideoList
+                                videos={this.state.videos}
+                                onVideoSelect={(userSelected) => {
+                                    this.setState({selectedVideo: this.state.videos[userSelected]})
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <div style={{
+                        "display": "flex",
+                        "alignSelf": "center",
+                        "paddingTop": "20px",
+                        "paddingLeft": "250px"
+                    }}>
+                        {videoIsSelected && <InputQuestion getPlayerTime={this.getPlayerTime}/>}
+                    </div>
+                    <div>
+                        <PresentedQuestions/>
+                    </div>
+                </React.Fragment>
+            </Provider>
         );
     }
 }
