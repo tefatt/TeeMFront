@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {Component} from 'react';
 import 'antd/dist/antd.css';
 import {Button, Modal, Form, Checkbox, Input, Row, Col, Icon} from 'antd';
 import {bindActionCreators} from 'redux'
+import uuid from "uuid";
+
 import {connect} from 'react-redux';
 import {inputQuestion} from '../actions/questionActions';
 
@@ -68,7 +70,7 @@ const CollectionCreateForm = Form.create()(
                 </Col>
             </Row>
         ));
-        const questionTitle = `Create a new question at: ${playedTime}s`;
+        const questionTitle = `Create a new question at: ${playedTime.toFixed(2)}s`;
         return (
             <Modal
                 visible={visible}
@@ -98,7 +100,7 @@ const CollectionCreateForm = Form.create()(
     }
 );
 
-class InputQuestion extends React.Component {
+class InputQuestion extends Component {
     state = {
         visible: false,
         index: 0,
@@ -106,9 +108,7 @@ class InputQuestion extends React.Component {
     };
 
     _restructureValues(values) {
-        console.log(values)
         let answers = values.answers.filter(el => el);
-        console.log(answers)
         return answers.map((value, i) => {
             return {"answerText": value, "isCorrect": !!values.isCorrect[i], "key": i}
         });
@@ -129,6 +129,7 @@ class InputQuestion extends React.Component {
             }
             values["answerData"] = this._restructureValues(values);
             values["playedTime"] = this.state.playedTime;
+            values["index"] = uuid.v4();
 
             const {["keys"]: _, ["answers"]: __, ["isCorrect"]: ___, ...questionData} = values;
 
@@ -138,6 +139,7 @@ class InputQuestion extends React.Component {
             this.setState({visible: false, index: 0, playedTime: 0});
         });
     };
+
     saveFormRef = (form) => {
         this.form = form;
     };

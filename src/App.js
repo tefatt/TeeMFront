@@ -96,14 +96,17 @@ class App extends Component {
                         </div>
                     </div>
                     <div style={{
-                        "display": "flex",
-                        "alignSelf": "center",
+                        "alignItems": "flex-center",
                         "paddingTop": "20px",
                         "paddingLeft": "250px"
                     }}>
                         {videoIsSelected && <InputQuestion getPlayerTime={this.getPlayerTime}/>}
                     </div>
-                    <div>
+                    <div style={{
+                        "alignItems": "flex-start",
+                        "paddingTop": "20px",
+                        "paddingLeft": "20px"
+                    }}>
                         <PresentedQuestions/>
                     </div>
                 </React.Fragment>

@@ -1,12 +1,24 @@
 import React, {Component} from 'react';
-import {Table, Divider} from 'antd';
+import {connect} from 'react-redux';
+
+import {Table, Divider, Icon, Switch} from 'antd';
+import EditModal from './EditModal'
+import {editAnswer, deleteAnswer} from '../actions/questionActions';
 
 
-class PresentedAnswers extends React.Component {
-
+class PresentedAnswers extends Component {
     state = {
         columns: [
             {
+                title: 'switch',
+                dataIndex: 'isCorrect',
+                key: 'isCorrect',
+                width: 10,
+                render: (e, record) => (<Switch onChange={switchValue => this.handleSwitchChange(record, switchValue)}
+                                                 defaultChecked={e}/>)
+            },
+            {
+                title: 'text',
                 dataIndex: 'answerText',
                 key: 'answerText',
                 width: 360,
@@ -15,13 +27,14 @@ class PresentedAnswers extends React.Component {
             {
                 title: 'Action',
                 key: 'action',
-                width: 60,
+                width: 10,
                 render: (text, record) => (
-                                            <span>
-                                              <a href="#">Edit</a>
-                                              <Divider type="vertical"/>
-                                              <a href="#">Delete</a>
-                                            </span>
+                    <div onClick={e => e.stopPropagation()}>
+                        <EditModal text={record.answerText} time={null}
+                                   handleSubmit={this.editAnswer(record)}/>
+                        <Divider type="vertical"/>
+                        <Icon type="delete" theme="twoTone" onClick={() => this.deleteAnswer(record.key)}/>
+                    </div>
                 ),
             }
         ],
@@ -30,33 +43,68 @@ class PresentedAnswers extends React.Component {
         pagination: false,
         size: 'medium',
         showHeader: false,
-        rowSelection: {},
         scroll: undefined
+    };
+
+    handleSwitchChange = (answerData, switchValue) => {
+        answerData["isCorrect"] = switchValue;
+
+        // dispatch action
+        this.props.editAnswer(this.props.questionIndex, answerData);
+    };
+
+    editAnswer = answerData => value => {
+        answerData["answerText"] = value.editedText;
+
+        // dispatch action
+        this.props.editAnswer(this.props.questionIndex, answerData);
+    };
+
+    deleteAnswer = index => {
+        console.log(index);
+        // dispatch action
+        this.props.deleteAnswer(this.props.questionIndex, index);
     };
 
     render() {
         const {["columns"]: columns, ...state} = this.state;
-        const data = this.props.data;
+        const answers = this.props.answers;
 
-        state["rowSelection"] = {
-            selectedRowKeys: data.map(answer => {
-                if (answer.isCorrect) return answer.key
-            }),
-
-            onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            },
-            getCheckboxProps: record => ({
-                disabled: record.name === 'Disabled User', // Column configuration not to be checked
-            }),
-        };
+        // state["rowSelection"] = {
+        //     selectedRowKeys: answers.map(answer => answer.isCorrect ? answer.key : null),
+        //
+        //     onSelect: (record, selected, selectedRows) => {
+        //         console.log(record)
+        //         console.log(selected)
+        //         console.log(selectedRows)
+        //         this.setState({rowSelection: new Set([...state["rowSelection"].selectedRowKeys.filter(Boolean), record.key])})
+        //         console.log({rowSelection: new Set([...state["rowSelection"].selectedRowKeys.filter(Boolean), record.key])})
+        //
+        //     },
+        //     getCheckboxProps: record => ({
+        //         disabled: record.name === 'Disabled User', // Column configuration not to be checked
+        //     }),
+        // };
+        // console.log(answers.map(answer => answer.isCorrect ? answer.key : null));
+        // console.log(state["rowSelection"]);
 
         return (
             <div>
-                <Table {...state} columns={columns} dataSource={data}/>
+                <Table {...state} columns={columns} dataSource={answers}/>
             </div>
         );
     }
 }
 
-export default PresentedAnswers;
+const mapDispatchToProps = dispatch => {
+    return {
+        editAnswer: (questionIndex, editedAnswer) => {
+            dispatch(editAnswer(questionIndex, editedAnswer));
+        },
+        deleteAnswer: (questionIndex, answerIndex) => {
+            dispatch(deleteAnswer(questionIndex, answerIndex));
+        }
+    };
+};
+
+export default connect(null, mapDispatchToProps)(PresentedAnswers);
