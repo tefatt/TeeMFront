@@ -9,10 +9,8 @@ const initialState = {};
 const store = createStore(
     combineReducers({questions: questionReducer}),
     initialState,
-    compose(
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-        applyMiddleware(logger, thunk)
-    )
+    compose(applyMiddleware(thunk, logger),
+        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 );
 
 export default store;

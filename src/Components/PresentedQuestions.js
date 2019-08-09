@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux'
 import PropTypes from 'prop-types';
 
 import PresentedAnswers from './PresentedAnswers'
-import {editQuestion, deleteQuestion} from '../actions/questionActions';
+import {editQuestion, deleteQuestion, saveQuestions} from '../actions/questionActions';
 import EditModal from './EditModal'
 
-import {Collapse, Divider, Icon} from 'antd';
+import {Collapse, Divider, Icon, Button} from 'antd';
 
 const {Panel} = Collapse;
 
@@ -20,10 +21,16 @@ class PresentedQuestions extends Component {
         this.props.editQuestion(questionData);
     };
 
-    deleteQuestion  = index => {
+    deleteQuestion = index => {
         // dispatch action
         this.props.deleteQuestion(index);
     };
+
+    handleSaveQuestions = (e) => {
+        e.preventDefault();
+        console.log(e, this.props.questions)
+        this.props.saveQuestions(this.props.questions);
+    }
 
     generateHeader = (questionItem) => (
         <span>
@@ -35,7 +42,8 @@ class PresentedQuestions extends Component {
     );
     generateExtra = (questionItem) => {
         return (<div onClick={e => e.stopPropagation()}>
-            <EditModal text={questionItem.title} time={questionItem.playedTime.toFixed(2)} handleSubmit={this.editQuestion(questionItem)}/>
+            <EditModal text={questionItem.title} time={questionItem.playedTime.toFixed(2)}
+                       handleSubmit={this.editQuestion(questionItem)}/>
             <Divider type="vertical"/>
             <Icon type="delete" theme="twoTone" onClick={() => this.deleteQuestion(questionItem.index)}/>
         </div>)
@@ -58,8 +66,12 @@ class PresentedQuestions extends Component {
         ));
         return (
             <div>
-                {!itemsLength && <h3>Created questions:</h3>}
-                {presentedQuestions}
+                {!itemsLength && <div>
+                    <h3>Created questions:</h3>
+                    {presentedQuestions}
+                    <Button type="primary" onClick={this.handleSaveQuestions}>Save questions</Button>
+                </div>
+                }
             </div>
         );
     }
@@ -79,15 +91,21 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        editQuestion: (editedQuestion) => {
-            dispatch(editQuestion(editedQuestion));
-        },
-        deleteQuestion: (questionIndex) => {
-            dispatch(deleteQuestion(questionIndex));
-        }
-    };
-};
+const mapDispatchToProps = (dispatch) => ({
+    editQuestion: (editedQuestion) => {
+        dispatch(editQuestion(editedQuestion));
+    },
+    deleteQuestion: (questionIndex) => {
+        dispatch(deleteQuestion(questionIndex));
+    },
+    saveQuestions: (payload) => {
+        dispatch(saveQuestions(payload))
+    }
+});
 
+// function mapDispatchToProps(dispatch) {
+//     return {
+//         actions: bindActionCreators(Object.assign({}, saveQuestions), dispatch),
+//     };
+// }
 export default connect(mapStateToProps, mapDispatchToProps)(PresentedQuestions);

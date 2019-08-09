@@ -69,25 +69,6 @@ class PresentedAnswers extends Component {
     render() {
         const {["columns"]: columns, ...state} = this.state;
         const answers = this.props.answers;
-
-        // state["rowSelection"] = {
-        //     selectedRowKeys: answers.map(answer => answer.isCorrect ? answer.key : null),
-        //
-        //     onSelect: (record, selected, selectedRows) => {
-        //         console.log(record)
-        //         console.log(selected)
-        //         console.log(selectedRows)
-        //         this.setState({rowSelection: new Set([...state["rowSelection"].selectedRowKeys.filter(Boolean), record.key])})
-        //         console.log({rowSelection: new Set([...state["rowSelection"].selectedRowKeys.filter(Boolean), record.key])})
-        //
-        //     },
-        //     getCheckboxProps: record => ({
-        //         disabled: record.name === 'Disabled User', // Column configuration not to be checked
-        //     }),
-        // };
-        // console.log(answers.map(answer => answer.isCorrect ? answer.key : null));
-        // console.log(state["rowSelection"]);
-
         return (
             <div>
                 <Table {...state} columns={columns} dataSource={answers}/>

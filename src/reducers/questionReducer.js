@@ -47,6 +47,9 @@ const questionReducer = (state = initialState, action) => {
                 if (question.index !== action.questionIndex) return question;
                 return {...question, answerData: question.answerData.filter((subElement) => subElement.key !== action.answerIndex)}
             })};
+
+        case "LOAD_QUESTIONS_SUCCESS":
+            return action.payload;
         default:
             return state;
     }

@@ -45,7 +45,7 @@ const EditForm = Form.create()(
                             },
                         ],
                     })(
-                        <InputNumber min={0} max={100} step={0.01}/>
+                        <InputNumber min={0} step={0.01}/>
                     )}
                 </Form.Item>}
             </Form>
@@ -89,7 +89,6 @@ class EditModal extends Component {
                     visible={this.state.visible}
                     onOk={this.handleEdit}
                     onCancel={this.handleCancel}>
-                    {/*<InputNumber min={0} max={10} defaultValue={this.props.time} step={0.01}/>*/}
                     <EditForm ref={this.saveFormRef}
                               text={this.props.text}
                               time={this.props.time}
