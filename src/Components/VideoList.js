@@ -11,7 +11,6 @@ class VideoList extends Component {
         if( this.props.videos.length === 0 ) {
           return (
               <List
-                  style={{ "width": "40%"}}
                   size={"large"}
                   header={<div>Video Suggestions</div>}
                   bordered
@@ -32,7 +31,7 @@ class VideoList extends Component {
         });
 
         return (
-            <ul style={{ "listStyle":"none" ,"width":"40%", "padding": "5px", "border": "1px solid #efefef", "marginBottom": "3px", "borderRadius": "5px" }}>
+            <ul style={{ "listStyle":"none", "padding": "5px", "border": "1px solid #efefef", "marginBottom": "3px", "borderRadius": "5px" }}>
                 { videoItems }
             </ul>
         );

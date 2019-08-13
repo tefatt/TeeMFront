@@ -28,7 +28,6 @@ class App extends Component {
             selectedVideo: {},
         };
         this.videoRef = React.createRef();
-
     }
 
     videoSearch(term) {
@@ -66,27 +65,51 @@ class App extends Component {
 
     render() {
         const videoIsSelected = !(this.state.videos === undefined || this.state.videos.length === 0);
-        // const videoIsSelected = true;
         return (
             <Provider store={store}>
                 <React.Fragment>
-                    <div style={{"display": "flex", "flexDirection": "column"}}>
-                        <div style={{"display": "flex", "justifyContent": "space-between", "background": "#123456"}}>
-                            <h1 style={{
-                                "color": "#fff",
-                                "alignSelf": "center",
-                                "flexBasis": "4",
-                                "paddingTop": "20px",
-                                "paddingLeft": "30px"
-                            }}>YTSearch <Icon type={"search"}/></h1>
-                            <SearchBar videos={this.state.videos} video={this.state.selectedVideo}
-                                       onInput={this.handleInput}
-                                       handleSearch={(video) => {
-                                           this.setState({selectedVideo: this.state.videos[video], search: false})
-                                       }}/>
-                        </div>
-                        <div style={{"display": "flex", "height": "60vh"}}>
+                    <div style={{
+                        "display": "flex",
+                        "flexDirection": "row",
+                        "alignItems": "center",
+                        "background": "#123456",
+                        "paddingLeft": "30px",
+                        "paddingRight": "30px",
+                        "justifyContent": "space-between",
+                    }}>
+                        <h1 style={{
+                            "color": "#fff",
+                            "paddingTop": "20px",
+                        }}>Search <Icon type={"search"}/></h1>
+                        <SearchBar videos={this.state.videos} video={this.state.selectedVideo}
+                                   onInput={this.handleInput}
+                                   handleSearch={(video) => {
+                                       this.setState({selectedVideo: this.state.videos[video], search: false})
+                                   }}
+                                   style={{
+                                       "width": "35%",
+                                       "display": "inline-flex",
+                                   }}
+                        />
+                    </div>
+                    <div style={{
+                        "display": "flex",
+                        "flexDirection": "row",
+                        "paddingLeft": "10px",
+                        "paddingRight": "10px",
+                        "justifyContent": "space-between",
+                    }}>
+                        <div style={{
+                            "flex":2,
+                            "padding": "5px",
+                            "border": "1px solid #efefef",
+                            "height": "70vh"
+                        }}>
                             <VideoDetail ytKey={API_KEY} video={this.state.selectedVideo} ref={this.videoRef}/>
+                        </div>
+                        <div style={{
+                            "flex":1
+                        }}>
                             <VideoList
                                 videos={this.state.videos}
                                 onVideoSelect={(userSelected) => {
@@ -96,20 +119,16 @@ class App extends Component {
                         </div>
                     </div>
                     <div style={{
-                        "alignItems": "flex-center",
-                        "paddingTop": "20px",
-                        "paddingLeft": "250px"
+                        "display": "inline-flex",
                     }}>
                         {videoIsSelected && <InputQuestion getPlayerTime={this.getPlayerTime}/>}
                     </div>
                     <div style={{
-                        "alignItems": "flex-start",
-                        "paddingTop": "20px",
-                        "paddingLeft": "20px"
+                        "display": "inline-flex",
                     }}>
                         <PresentedQuestions/>
                     </div>
-                </React.Fragment>
+            </React.Fragment>
             </Provider>
         );
     }

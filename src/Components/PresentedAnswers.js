@@ -13,7 +13,7 @@ class PresentedAnswers extends Component {
                 title: 'switch',
                 dataIndex: 'isCorrect',
                 key: 'isCorrect',
-                width: 10,
+                width: 5,
                 render: (e, record) => (<Switch onChange={switchValue => this.handleSwitchChange(record, switchValue)}
                                                  defaultChecked={e}/>)
             },
@@ -21,13 +21,13 @@ class PresentedAnswers extends Component {
                 title: 'text',
                 dataIndex: 'answerText',
                 key: 'answerText',
-                width: 360,
+                width: 500,
                 render: text => <a href="javascript:;">{text}</a>,
             },
             {
                 title: 'Action',
                 key: 'action',
-                width: 10,
+                width: 5,
                 render: (text, record) => (
                     <div onClick={e => e.stopPropagation()}>
                         <EditModal text={record.answerText} time={null}

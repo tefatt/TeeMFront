@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import 'antd/dist/antd.css';
 import {Button, Modal, Form, Checkbox, Input, Row, Col, Icon} from 'antd';
 import {bindActionCreators} from 'redux'
-import uuid from "uuid";
 
 import {connect} from 'react-redux';
 import {inputQuestion} from '../actions/questionActions';
@@ -129,7 +128,6 @@ class InputQuestion extends Component {
             }
             values["answerData"] = this._restructureValues(values);
             values["playedTime"] = this.state.playedTime;
-            values["index"] = uuid.v4();
 
             const {["keys"]: _, ["answers"]: __, ["isCorrect"]: ___, ...questionData} = values;
 
@@ -173,7 +171,11 @@ class InputQuestion extends Component {
 
     render() {
         return (
-            <div>
+            <div style={{
+                "alignItems": "flex-center",
+                // "paddingTop": "20px",
+                "paddingLeft": "25px"
+            }}>
                 <Button type="primary" onClick={this.showModal}>Add Question</Button>
                 <CollectionCreateForm
                     ref={this.saveFormRef}

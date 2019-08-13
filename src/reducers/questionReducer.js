@@ -10,8 +10,8 @@ const questionReducer = (state = initialState, action) => {
             };
         case "EDIT_QUESTION":
             return {
-                inputtedQuestions: state.inputtedQuestions.map(item => {
-                    if (item.index !== action.index) return item;
+                inputtedQuestions: state.inputtedQuestions.map((item, index) => {
+                    if (index !== action.index) return item;
                     return {
                         ...item,
                         ...action.payload
@@ -21,12 +21,12 @@ const questionReducer = (state = initialState, action) => {
 
         case "DELETE_QUESTION":
             return {
-                inputtedQuestions: state.inputtedQuestions.filter(item => item.index !== action.index)
+                inputtedQuestions: state.inputtedQuestions.filter((item, index) => index !== action.index)
             };
         case "EDIT_ANSWER":
             return {
-                inputtedQuestions: state.inputtedQuestions.map(qItem => {
-                    if (qItem.index !== action.questionIndex) return qItem;
+                inputtedQuestions: state.inputtedQuestions.map((qItem, index) => {
+                    if (index !== action.questionIndex) return qItem;
                     const editedAnswers = {
                         "answerData": qItem.answerData.map(aItem => {
                             if (aItem.key !== action.answerIndex) return aItem;
@@ -43,8 +43,8 @@ const questionReducer = (state = initialState, action) => {
                 })
             };
         case "DELETE_ANSWER":
-            return {inputtedQuestions : state.inputtedQuestions.map((question) => {
-                if (question.index !== action.questionIndex) return question;
+            return {inputtedQuestions : state.inputtedQuestions.map((question, index) => {
+                if (index !== action.questionIndex) return question;
                 return {...question, answerData: question.answerData.filter((subElement) => subElement.key !== action.answerIndex)}
             })};
 

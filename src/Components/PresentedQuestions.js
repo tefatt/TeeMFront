@@ -55,11 +55,11 @@ class PresentedQuestions extends Component {
             <div>
                 <Collapse>
                     <Panel
-                        key={questionItem.index}
+                        key={index}
                         header={this.generateHeader(questionItem)}
                         extra={this.generateExtra(questionItem)}
                     >
-                        <PresentedAnswers answers={questionItem.answerData} questionIndex={questionItem.index}/>
+                        <PresentedAnswers answers={questionItem.answerData} questionIndex={index}/>
                     </Panel>
                 </Collapse>
             </div>
@@ -69,7 +69,13 @@ class PresentedQuestions extends Component {
                 {!itemsLength && <div>
                     <h3>Created questions:</h3>
                     {presentedQuestions}
-                    <Button type="primary" onClick={this.handleSaveQuestions}>Save questions</Button>
+                    <div style={{
+                        "alignItems": "flex-center",
+                        "paddingTop": "20px",
+                        "paddingLeft": "250px"
+                    }}>
+                        <Button type="danger" onClick={this.handleSaveQuestions}>Save questions</Button>
+                    </div>
                 </div>
                 }
             </div>
