@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import VideoListItem from './VideoListItem';
-import { List } from 'antd';
+import {List} from 'antd';
 
 class VideoList extends Component {
     state = {
@@ -8,31 +8,37 @@ class VideoList extends Component {
     };
 
     render() {
-        if( this.props.videos.length === 0 ) {
-          return (
-              <List
-                  size={"large"}
-                  header={<div>Video Suggestions</div>}
-                  bordered
-                  dataSource={ this.state.data }
-                  renderItem={item => (<List.Item>{item}</List.Item>)}
-              />
-          )
+        if (this.props.videos.length === 0) {
+            return (
+                <List
+                    size={"large"}
+                    header={<div>Video Suggestions</div>}
+                    bordered
+                    dataSource={this.state.data}
+                    renderItem={item => (<List.Item>{item}</List.Item>)}
+                />
+            )
         }
-
+        console.log(this.props)
         const videoItems = this.props.videos.map((video, index) => {
             return (
                 <VideoListItem
-                    key={ index }
+                    key={index}
                     video={video}
-                    onUserSelected={ this.props.onVideoSelect.bind( this, [ index ]) }
+                    onUserSelected={this.props.onVideoSelect.bind(this, [index])}
                 />
             )
         });
 
         return (
-            <ul style={{ "listStyle":"none", "padding": "5px", "border": "1px solid #efefef", "marginBottom": "3px", "borderRadius": "5px" }}>
-                { videoItems }
+            <ul style={{
+                "listStyle": "none",
+                "padding": "5px",
+                "border": "1px solid #efefef",
+                "marginBottom": "3px",
+                "borderRadius": "5px"
+            }}>
+                {videoItems}
             </ul>
         );
     }

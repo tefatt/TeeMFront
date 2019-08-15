@@ -65,20 +65,22 @@ class PresentedQuestions extends Component {
             </div>
         ));
         return (
-            <div>
-                {!itemsLength && <div>
+            <React.Fragment>
+                {!itemsLength && <div style={{
+                    "flex": "auto"
+                }}>
                     <h3>Created questions:</h3>
                     {presentedQuestions}
                     <div style={{
-                        "alignItems": "flex-center",
-                        "paddingTop": "20px",
-                        "paddingLeft": "250px"
+                        "paddingTop": "10px",
+                        "paddingBottom": "10px",
+                        "textAlign": "center"
                     }}>
                         <Button type="danger" onClick={this.handleSaveQuestions}>Save questions</Button>
                     </div>
                 </div>
                 }
-            </div>
+            </React.Fragment>
         );
     }
 }

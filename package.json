@@ -22,6 +22,8 @@
     "rn-range-slider": "^1.2.6",
     "videojs-youtube": "^2.6.0",
     "youtube-api-search": "^0.0.5",
+    "youtube-api-search-promise": "^0.2.0",
+    "youtube-search-promise": "^1.0.3",
     "yt-player": "^3.1.1"
   },
   "scripts": {

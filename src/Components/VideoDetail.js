@@ -39,7 +39,7 @@ class VideoDetail extends Component {
 
         return (
             <React.Fragment>
-                <div style={{"position": "relative", "paddingTop": "80%"}}>
+                <div style={{"position": "relative", "paddingTop": "65%"}}>
                     <ReactPlayer controls
                                  width='100%'
                                  height='100%'

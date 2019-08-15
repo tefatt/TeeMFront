@@ -173,7 +173,7 @@ class InputQuestion extends Component {
         return (
             <div style={{
                 "alignItems": "flex-center",
-                // "paddingTop": "20px",
+                "paddingTop": "20px",
                 "paddingLeft": "25px"
             }}>
                 <Button type="primary" onClick={this.showModal}>Add Question</Button>
