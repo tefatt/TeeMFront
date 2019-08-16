@@ -3,11 +3,10 @@ import React, {Component} from 'react';
 import VideoList from './VideoList';
 import VideoDetail from './VideoDetail';
 
-const API_KEY = "AIzaSyBIrrOQZ45NhLJX9UN8klnNrhyrlYX3QAk";
-
 class Video extends Component {
+
     render() {
-        console.log(this.props)
+        console.log(this.props.videoRef)
         return (<div style={{
                 "display": "flex",
                 "flexDirection": "row",
@@ -21,7 +20,7 @@ class Video extends Component {
                     "border": "1px solid #efefef",
                     "height": "60vh"
                 }}>
-                    <VideoDetail ytKey={API_KEY} video={this.props.selectedVideo} videoRef={this.props.videoRef}/>
+                    <VideoDetail video={this.props.selectedVideo} videoRef={this.props.videoRef}/>
                 </div>
                 <div style={{
                     "flex": 1

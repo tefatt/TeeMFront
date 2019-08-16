@@ -20,12 +20,12 @@ class VideoSearch extends Component {
         this.setState({videos: data, selectedVideo: data[0]})
     };
     getPlayerTime = () => {
-        return this.videoRef.current.getTimeThatPassed();
+        return this.videoRef.current.getCurrentTime();
     };
 
     render() {
         const videoIsSelected = !(this.state.videos === undefined || this.state.videos.length === 0);
-        console.log(this)
+        console.log(this.videoRef)
         return (
             <React.Fragment>
                 <Search getData={this.getVideoData}/>

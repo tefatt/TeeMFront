@@ -192,12 +192,13 @@ class InputQuestion extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        inputQuestion: (values) => {
-            dispatch(inputQuestion(values));
-        }
-    };
-};
 
+const mapDispatchToProps = (dispatch) => ({
+    inputQuestion: (values) => {
+        dispatch(inputQuestion(values));
+    },
+    // getPlayerTime: (questionIndex) => {
+    //     dispatch(getPlayerTime(questionIndex));
+    // },
+});
 export default connect(null, mapDispatchToProps)(InputQuestion);
