@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {Provider} from 'react-redux';
 
-import VideoSearch from './Components/VideoSearch'
-import PresentedQuestions from './Components/PresentedQuestions'
+import MainContainer from './container/MainContainer'
 
 import store from './store'
 
@@ -15,15 +14,7 @@ class App extends Component {
         return (
             <Provider store={store}>
                 <React.Fragment>
-                    <VideoSearch/>
-                    <div style={{
-                        "display": "flex",
-                        "justifyContent": "center",
-                        "paddingLeft": "20px",
-                        "paddingRight": "20px"
-                    }}>
-                        <PresentedQuestions/>
-                    </div>
+                    <MainContainer/>
                 </React.Fragment>
             </Provider>
         );

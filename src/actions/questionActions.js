@@ -48,16 +48,16 @@ export function saveQuestionsSuccess(payload) {
     return {type: "LOAD_QUESTIONS_SUCCESS", payload}
 };
 
-export function saveQuestions(){
+export function saveQuestions(videoId){
         return function(dispatch, getState) {
-        console.log(getState())
-            const payload = getState().questions;
+            const payload = {...getState().questions, videoId};
+            console.log(payload);
         return submitQuestions(payload)
             .then(response => {
                 dispatch(saveQuestionsSuccess(response.json));
             })
             .catch(error => {
-                console.log(error);
+                window.alert(error);
                 throw error;
             })
     }

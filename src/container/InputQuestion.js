@@ -80,7 +80,7 @@ const CollectionCreateForm = Form.create()(
             >
                 <Form layout="vertical">
                     <FormItem label="Question text">
-                        {getFieldDecorator('title', {
+                        {getFieldDecorator('questionText', {
                             rules: [{required: true, message: 'Please enter the text of question'}],
                         })(
                             <Input type="textarea"/>

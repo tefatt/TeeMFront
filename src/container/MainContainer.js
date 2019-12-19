@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 
 import Search from './Search'
 import Video from './Video'
+import PresentedQuestions from './PresentedQuestions'
 import InputQuestion from './InputQuestion'
 
-class VideoSearch extends Component {
+class MainContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -16,7 +17,6 @@ class VideoSearch extends Component {
     }
 
     getVideoData = data => {
-        console.log(data);
         this.setState({videos: data, selectedVideo: data[0]})
     };
     getPlayerTime = () => {
@@ -25,7 +25,6 @@ class VideoSearch extends Component {
 
     render() {
         const videoIsSelected = !(this.state.videos === undefined || this.state.videos.length === 0);
-        console.log(this.videoRef)
         return (
             <React.Fragment>
                 <Search getData={this.getVideoData}/>
@@ -36,9 +35,17 @@ class VideoSearch extends Component {
                 }}>
                     {videoIsSelected && <InputQuestion getPlayerTime={this.getPlayerTime}/>}
                 </div>
+                <div style={{
+                    "display": "flex",
+                    "justifyContent": "center",
+                    "paddingLeft": "20px",
+                    "paddingRight": "20px"
+                }}>
+                    <PresentedQuestions selectedVideo={this.state.selectedVideo}/>
+                </div>
             </React.Fragment>
         );
     }
 }
 
-export default VideoSearch;
+export default MainContainer;

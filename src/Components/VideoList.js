@@ -19,7 +19,6 @@ class VideoList extends Component {
                 />
             )
         }
-        console.log(this.props)
         const videoItems = this.props.videos.map((video, index) => {
             return (
                 <VideoListItem

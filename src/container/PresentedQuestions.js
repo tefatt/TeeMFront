@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import PresentedAnswers from './PresentedAnswers'
 import {editQuestion, deleteQuestion, saveQuestions} from '../actions/questionActions';
-import EditModal from './EditModal'
+import EditModal from '../components/EditModal'
 
 import {Collapse, Divider, Icon, Button} from 'antd';
 
@@ -13,7 +13,6 @@ const {Panel} = Collapse;
 
 class PresentedQuestions extends Component {
 
-    state = {disabled: false};
     editQuestion = questionData => value => {
         // dispatch action
         questionData["title"] = value.editedText;
@@ -28,9 +27,9 @@ class PresentedQuestions extends Component {
 
     handleSaveQuestions = (e) => {
         e.preventDefault();
-        console.log(e, this.props.questions)
-        this.props.saveQuestions(this.props.questions);
-    }
+        const videoId = this.props.selectedVideo.id.videoId;
+        this.props.saveQuestions(videoId);
+    };
 
     generateHeader = (questionItem) => (
         <span>
@@ -42,7 +41,7 @@ class PresentedQuestions extends Component {
     );
     generateExtra = (questionItem) => {
         return (<div onClick={e => e.stopPropagation()}>
-            <EditModal text={questionItem.title} time={questionItem.playedTime.toFixed(2)}
+            <EditModal text={questionItem.questionText} time={questionItem.playedTime.toFixed(2)}
                        handleSubmit={this.editQuestion(questionItem)}/>
             <Divider type="vertical"/>
             <Icon type="delete" theme="twoTone" onClick={() => this.deleteQuestion(questionItem.index)}/>
@@ -57,8 +56,7 @@ class PresentedQuestions extends Component {
                     <Panel
                         key={index}
                         header={this.generateHeader(questionItem)}
-                        extra={this.generateExtra(questionItem)}
-                    >
+                        extra={this.generateExtra(questionItem)}>
                         <PresentedAnswers answers={questionItem.answerData} questionIndex={index}/>
                     </Panel>
                 </Collapse>

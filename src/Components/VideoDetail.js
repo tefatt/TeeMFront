@@ -4,7 +4,6 @@ import {parse, toSeconds} from 'iso8601-duration';
 import ReactPlayer from 'react-player'
 
 const VideoDetail = ({video, videoRef}) => {
-    console.log(videoRef)
     if (!video.id) {
         return (
             <div style={{
@@ -25,7 +24,7 @@ const VideoDetail = ({video, videoRef}) => {
                              height='100%'
                              url={url}
                              ref={videoRef}
-                             // playing={isPlaying}
+                             playing={true}
                              style={{
                                  "position": "absolute",
                                  "top": 0,

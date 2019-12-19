@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 
-import SearchBar from './SearchBar';
+import SearchBar from '../components/SearchBar';
 import YTSearch from 'youtube-api-search-promise';
 import {Icon, notification} from 'antd';
 
 
-const API_KEY = "AIzaSyBIrrOQZ45NhLJX9UN8klnNrhyrlYX3QAk";
+const API_KEY = "AIzaSyC5tkUPef4Tm8o-zYHtvC2E6vpHje95H0c";
 
 
 class Search extends Component {

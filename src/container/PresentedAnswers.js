@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import {Table, Divider, Icon, Switch} from 'antd';
-import EditModal from './EditModal'
+import EditModal from '../components/EditModal'
 import {editAnswer, deleteAnswer} from '../actions/questionActions';
 
 

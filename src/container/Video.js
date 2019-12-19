@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 
-import VideoList from './VideoList';
-import VideoDetail from './VideoDetail';
+import VideoList from '../components/VideoList';
+import VideoDetail from '../components/VideoDetail';
 
 class Video extends Component {
 
     render() {
-        console.log(this.props.videoRef)
         return (<div style={{
                 "display": "flex",
                 "flexDirection": "row",
